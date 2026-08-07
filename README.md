@@ -21,6 +21,7 @@ Firmware-Learning/
 ├── 05-leetcode/              # Selected Firmware-focused LeetCode C solutions (Bit, Pointer, Memory)
 └── 06-notes/                 # Hardware & OS concepts notes
 
+```
 ## 🛠 Tech Stack & Environment
 
 - **Language**: C (C99/C11) / Linux Shell (Bash)
