@@ -1,15 +1,37 @@
-# C Struct Memory Alignment & Padding
+# C Memory Management & Pointer Operations
 
-Demonstration of C memory alignment, structure padding rules, and GCC `__attribute__((packed))` behavior.
+This module covers the core C memory concepts,struct alignment,pointer arithmetic, and safe dynamic memory management.
 
-## Key Takeaways
+## Topics Covered
 
-1. **Member Alignment**: Member offset must be a multiple of its own type size.
-2. **Structure Alignment**: Total size of a struct must be a multiple of its largest member's size.
-3. **Packed Attribute**: Using `__attribute__((packed))` strips all padding bytes, which is useful for register mapping and network packet headers, but comes with performance penalty on unaligned memory access.
+1. **Struct Padding & Alignment('padding_test.c')**
+    -Memeory alignment rules & padding byte insertion.
+    -GCC'__attribute((packed))'usage,hardware register mapping,and alignment fault trade-offs.
 
-## Build & Run
+2. **Pointer Arithmetic & Type Casting('pointer_arithmetic.c')**
+    -Understanding pointer strides based on pointer type sizes ('sizeof(*ptr)').
+    -Different between 'a'('int*') and '&a'('int(*)[5]').
+    -Pointer arithmetic and explicit casting in C.
+
+3. **Dynamic Memeory & Safety('dynamic_memory.c')**
+    -Safe heap allocation using 'malloc' and 'free'.
+    -Prevetion of dangling pointers by setting pointers to 'NULL' after freeing.
+    -Memory leak inspection using **valgrind**
+
+
+## Build & Test
 
 ```bash
+#Buld all targets
 make
+
+#Run excutables
 ./padding_test
+./pointer_arithmetic
+./dynamic_memory
+
+#Memory leak check
+valgrind --leak-check=full ./dynamic_memory
+
+#Clean build artifacts
+make clean

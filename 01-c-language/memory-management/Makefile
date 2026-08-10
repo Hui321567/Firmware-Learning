@@ -1,15 +1,20 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -g
 
-TARGET = padding_test
-SRC = padding_test.c
+TARGETS = padding_test pointer_arithmetic dynamic_memory
 
-all:$(TARGET)
 
-$(TARGET):$(SRC)
-	$(CC) $(CFLAGS) -o $(TARGET)  $(SRC)
+all:$(TARGETS)
+
+padding_test: padding_test.c
+	$(CC) $(CFLAGS) -o $@ $<
+pointer_arithmetic: pointer_arithmetic.c
+	$(CC) $(CFLAGS) -o $@ $<
+dynamic_memory: dynamic_memory.c
+	$(CC) $(CFLAGS) -o $@ $<
+
 
 clean:
-	-rm -f $(TARGET)
+	-rm -f $(TARGETS)
 
 .PHONY: all clean
