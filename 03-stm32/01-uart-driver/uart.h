@@ -2,29 +2,37 @@
 #define UART_H
 
 #include <stdint.h>
-#include <stdbool.h>
 
-/* 模擬 STM32 UART 暫存器結構體 */
+/* =========================================================================
+ * 1. STM32 USART 暫存器結構體映射 (Memory-Mapped Registers)
+ * ========================================================================= */
 typedef struct {
-    volatile uint32_t SR;   /* Status Register (狀態暫存器) */
-    volatile uint32_t DR;   /* Data Register (資料暫存器) */
-    volatile uint32_t BRR;  /* Baud Rate Register (波特率設定暫存器) */
-    volatile uint32_t CR1;  /* Control Register 1 (控制暫存器 1) */
-} UART_TypeDef;
+    volatile uint32_t SR;   // Status Register           (Offset: 0x00)
+    volatile uint32_t DR;   // Data Register             (Offset: 0x04)
+    volatile uint32_t BRR;  // Baud Rate Register        (Offset: 0x08)
+    volatile uint32_t CR1;  // Control Register 1        (Offset: 0x0C)
+    volatile uint32_t CR2;  // Control Register 2        (Offset: 0x10)
+    volatile uint32_t CR3;  // Control Register 3        (Offset: 0x14)
+} USART_TypeDef;
 
-/* Status Register (SR) Bit Definitions */
-#define UART_SR_TXE   (1 << 7)  /* Transmit Data Register Empty (1: 可寫入新資料) */
-#define UART_SR_RXNE  (1 << 5)  /* Read Data Register Not Empty (1: 有新資料可讀取) */
+/* =========================================================================
+ * 2. 暫存器 Bit Mask 定義
+ * ========================================================================= */
+// Status Register (SR) Bits
+#define USART_SR_TXE   (1U << 7)  // Transmit Data Register Empty
+#define USART_SR_RXNE  (1U << 5)  // Read Data Register Not Empty
 
-/* Control Register 1 (CR1) Bit Definitions */
-#define UART_CR1_UE   (1 << 13) /* USART Enable (1: 啟用 UART) */
-#define UART_CR1_TE   (1 << 3)  /* Transmitter Enable (1: 啟用傳送) */
-#define UART_CR1_RE   (1 << 2)  /* Receiver Enable (1: 啟用接收) */
+// Control Register 1 (CR1) Bits
+#define USART_CR1_UE   (1U << 13) // USART Enable
+#define USART_CR1_TE   (1U << 3)  // Transmitter Enable
+#define USART_CR1_RE   (1U << 2)  // Receiver Enable
 
-/* API Function Declarations */
-void uart_init(UART_TypeDef *uart, uint32_t baudrate);
-void uart_send_char(UART_TypeDef *uart, char ch);
-void uart_send_string(UART_TypeDef *uart, const char *str);
-char uart_receive_char(UART_TypeDef *uart);
+/* =========================================================================
+ * 3. 通用 UART 驅動程式 API 宣告
+ * ========================================================================= */
+void uart_init(uint32_t pclk, uint32_t baudrate);
+void uart_send_char(char c);
+char uart_receive_char(void);
+void uart_send_string(const char *str);
 
 #endif // UART_H
