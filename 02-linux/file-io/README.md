@@ -1,15 +1,27 @@
-# Linux File I/O - my_cat
+# Linux File I/O & System Calls
 
-A simple C implementation of the `cat` command to demonstrate file operations in Linux.
+This module demonstrates low-level Linux file operations using POSIX system call interfaces instead of standard C library `stdio` abstractions. 
 
-## Features
-- Reads and prints file contents line by line.
-- Proper error handling for missing arguments or missing files.
-- Built with standard GCC flags (`-Wall -Wextra -g`).
-- Verified with Valgrind for zero memory leaks.
+## Key Features
+1. **POSIX System Calls**:
+    - Uses `open()`, `read()`, `write()`, and `close()` directly to interact with Linux Kernel File Descripitors (FDs).
+2. **Zero-Buffer Abstraction**:
+    - Bypasses Libc stream buffering for direct user-to-kernel memory transfer via user-mangaed byte buffers.
+3. **Standard File Descripitors**:
+    - Direct output stream handling using `STDOUT_FILENO`(1) and `STDERR_FILENO`(2).
 
-## How to Build and Run
+## Implementation (`io_test`)
+
+Implements a custom, lightweight version of the Linux `io_test` command line utility using direct file descripitor manipulation. 
+
+## How to Build & Run
 ```bash
+
+# Build the utility
 make
-./my_cat <filename>
-valgrind --leak-check=full ./my_cat <filename>
+
+# Test reading a text file
+./io_test text.txt
+
+# Clean build artifacts
+make clean 

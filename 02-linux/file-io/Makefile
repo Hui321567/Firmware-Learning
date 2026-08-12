@@ -1,13 +1,14 @@
 CC = gcc
-CFLAGES = -Wall -Wextra -g
+CFLAGES = -Wall -Wextra -std=c11 -g
 
-TAGET = my_cat
-SRC = my_cat.c
+TARGET = io_test
 
-all:$(TAGET)
+all:$(TARGET)
 
-$(TAGET): $(SRC)
-	$(CC) $(CFLAGES) $(SRC) -o $(TAGET)
+$(TARGET): io_test.c
+	$(CC) $(CFLAGES) -o $@ $<
 
 clean:
-	rm -f $(TAGET)
+	rm -f $(TARGET)
+
+.PHONY: all clean
