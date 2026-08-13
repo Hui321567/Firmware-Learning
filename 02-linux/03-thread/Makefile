@@ -1,11 +1,14 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -g -pthread
 
-TARGET = thread_demo
+TARGET = thread_demo cond_demo
 
 all:$(TARGET)
 
-$(TARGET):thread_demo.c
+thread_demo:thread_demo.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+cond_demo:cond_demo.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
