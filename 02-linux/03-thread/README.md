@@ -1,33 +1,51 @@
-# POSIX Thread (Pthread) & Condtion Variables
+# Linux POSIX Threads & Producer-Consumer Synchronization
 
-This module demonstrates multi-threading, task synchronization, and thread communication in Linux using POSIX Threads (`pthread_t`), Mutex locks (`pthread_mutex_t`),and Condition Variables (`pthread_cond_t`).
+## 1. Overview
+This project demonstrates POSIX multi-threading (`pthreads`) and thread synchronization primitives in Linux, featuring a Producer-Consumer architecture with a shared Ring Buffer.
 
-## Key Concepts
+## 2. Learning Objectives
+- Master POSIX thread creation and termination management (`pthread_create`, `pthread_join`).
+- Prevent race conditions using Mutex locks (`pthread_mutex_t`).
+- Implement event-driven thread signaling with Condition Variables (`pthread_cond_t`).
+- Design a thread-safe Producer-Consumer pattern.
 
-1. **Multi-Threading(`pthread_create`, `pthread_join`)**:
-    - Creating the concurrent threads within the same process memory space using .
-2. **Mutex Protection(`pthread_mutex_t`)**:
-    - Using `pthread_mutex_lock()` and `pthread_mutex_unlock()` to enforce mutual exclusion on critical sections, ensuring thread safety. 
-3. **Condition Variables(`pthread_cond_t`)**:
-    - Using `pthread_cond_wait()` and `pthread_cond_signal()` to synchronize producer and consumer operation.
+## 3. Key Concepts
+- **Multithreading**: Concurrent execution paths sharing the same process memory space.
+- **Mutex Lock**: Mutual exclusion protecting critical sections.
+- **Condition Variables**: Thread sleeping and signaling mechanism to prevent CPU polling.
+- **Producer-Consumer Pattern**: Asynchronous data exchange via shared circular storage.
 
+## 4. Implementation
+- `thread_demo.c`: Basic thread creation, arguments passing, and thread joining.
+- `cond_demo.c`: Producer-Consumer pattern using Mutex and Condition Variables.
 
-## Code Structure
+## 5. Project Structure
+```text
+.
+├── cond_demo.c
+├── thread_demo.c
+├── Makefile
+└── README.md
 
-- `thread_demo.c`: Spawns 2 concurrent worker threads that safely increment a shared counter using mutex protection.
-- `cond_demo.c`: Advanced Producer-Consumer pattern using Condition Variables and Ring Buffer
-- `Makefile`: Build setup with the `-pthread` compilation flag.
+6. Build & Run
 
-## Build & Run
-
-```bash
-# Build the thread_demo and cond_demo
+Bash
+# Compile
 make
 
-# Run the thread_demo
+# Run thread creation demo
 ./thread_demo
 
-# Run the cond_demo
+# Run Producer-Consumer synchronization test
+./cond_demo
 
-# Clean the build artifacts
+# Clean build artifacts
 make clean
+
+7. Verification
+Verified that race conditions are prevented, threads sleep properly without maxing out CPU utilization, and bounded buffers do not overflow or underflow.
+
+8. What I Learned
+Why while loops are mandatory around pthread_cond_wait() to handle spurious wakeups.
+
+How thread synchronization patterns directly mirror hardware interrupt/main-loop event handling in RTOS.

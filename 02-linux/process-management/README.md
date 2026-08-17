@@ -1,29 +1,51 @@
-# Linux Process Managment & Inter-Process Communication (IPC)
+# Linux Process Management & Inter-Process Communication (IPC)
 
-This module explores core Linux system programming concepts, including process lifecycle management, image replacement, resource cleanup, and Inter-Process Coummnication (IPC) via anonymous pipes.
+## 1. Overview
+This project explores Linux process lifecycles, process creation, execution overriding, zombie process handling, and inter-process communication (IPC) via anonymous pipes.
 
-## Topics Covered
+## 2. Learning Objectives
+- Master process creation and lifecycle management (`fork`, `execvp`, `waitpid`).
+- Prevent and clean up zombie processes.
+- Implement anonymous pipes for parent-child IPC.
+- Understand Linux file descriptor duplication in pipes.
 
-1. **Process Lifecycle (`fork_demo.c`)**
-    - **`fork()`**: Process duplication and Copy-on-Write (COW) concept.
-    - **`execvp()`**: Replaceing child process memory image with system commands (`ls -l`).
-    - **`waitpid()`**: Parent waiting for child exit status to avoid zambie processes.
+## 3. Key Concepts
+- **Process Creation**: `fork()` duplicating the calling process.
+- **Program Execution**: Replacing process image via `execvp()`.
+- **Process Synchronization**: Preventing resource leaks and zombie states using `waitpid()`.
+- **Inter-Process Communication**: Unidirectional data streaming via `pipe()`.
 
-2. **Inter-Process Communication (`pipe_demo.c`)**
-    - **`pipe()`**: Creating unidirectional byte-stream channels using File Descriptors (`pipefd[0]` for read, `pipefd[1]` for write).
-    - **Safe I/O Handling**: Managing despriptors and appending null terminators (`'\0'`) based on actual bytes read.
+## 4. Implementation
+- `fork_demo.c`: Demonstrates `fork()`, process isolation, and child waiting.
+- `pipe_demo.c`: Demonstrates anonymous pipe communication between parent and child processes.
 
-## Build & Run
+## 5. Project Structure
+```text
+.
+├── fork_demo.c
+├── pipe_demo.c
+├── Makefile
+└── README.md
 
-```bash
-# Compile all demos
+6. Build & Run
+
+Bash
+# Compile binaries
 make
 
-# Run process lifecycle demo
+# Execute fork demonstration
 ./fork_demo
 
-# Run pipe IPC demo
+# Execute pipe IPC demonstration
 ./pipe_demo
 
 # Clean build artifacts
 make clean
+
+7. Verification
+Verified process PIDs, exit statuses, and piped message delivery via standard terminal execution.
+
+8. What I Learned
+Memory isolation between parent and child processes after fork().
+
+How anonymous pipes manage read/write file descriptors across processes.
