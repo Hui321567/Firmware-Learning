@@ -25,7 +25,7 @@ bool ring_buffer_push(ring_buffer_t* rb,int data){
 }
 
 bool ring_buffer_pop(ring_buffer_t* rb,int* data){
-    if(!rb || ring_buffer_isEmpty(rb)) return false;
+    if(!rb || ring_buffer_isEmpty(rb) || !data) return false;
     *data = rb->buffer[rb->tail];
     rb->tail = (rb->tail + 1) % RING_BUFFER_SIZE;
     rb->count--;

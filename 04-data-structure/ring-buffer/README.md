@@ -6,7 +6,7 @@ This project implements a pure C Circular Ring Buffer data structure integrated 
 It simulates hardware interrupt driven event handling (such as STM32 UART RX Interrupt Service Routines), enabling clean architectural decoupling between low-level buffer management and upper-layer application processing.
 
 ## 2. Learning Objectives
-- Design a thread-safe / ISR-ready Ring Buffer data structure in pure C.
+- Design a reusable Ring Buffer suitable as a foundation for UART/ISR-oriented firmware experiments.
 - Master modular arithmetic `(index + 1) % SIZE` for boundary wrap-around protection.
 - Implement Function Pointer callbacks to achieve behavioral decoupling.
 - Optimize memory usage by passing struct instances by reference (`ring_buffer_t*`).
@@ -30,8 +30,9 @@ It simulates hardware interrupt driven event handling (such as STM32 UART RX Int
 ├── main.c
 ├── Makefile
 └── README.md
+```
 
-6. Build & Run
+## 6. Build & Run
 
 Bash
 # Compile the module
@@ -43,18 +44,34 @@ make
 # Clean build artifacts
 make clean
 
-7. Verification
-Verified full cycle execution:
+## 7. Verification
 
-Pushed element sequence (10, 20, 30, 40).
+The implementation was verified with functional and edge-case tests.
 
-Processed elements via function pointer callback (on_data_received).
+### Test Cases
 
-Verified buffer state returned to empty (isEmpty == true).
+- Empty buffer pop
+- Fill buffer to maximum capacity
+- Push when buffer is full
+- Circular wrap-around
+- FIFO ordering
+- NULL output pointer handling
 
-8. What I Learned
-How callback functions decouple drivers from application logic in firmware development.
+### Compiler Checks
 
-Why function pointer signatures must strictly match arguments to avoid runtime stack corruption.
+Built with:
 
-Common pitfalls in pointer manipulation (e.g., passing double pointers ** instead of single pointers *).
+```bash
+gcc -Wall -Wextra -std=c11 -g
+```
+No compiler warnings were reported.
+
+Memory Validation
+
+Valgrind was used to check for memory errors:
+```bash
+valgrind --leak-check=full --show-leak-kinds=all ./ring_buffer_test
+```
+Result:
+All heap blocks were freed -- no leaks are possible
+ERROR SUMMARY: 0 errors from 0 contexts
