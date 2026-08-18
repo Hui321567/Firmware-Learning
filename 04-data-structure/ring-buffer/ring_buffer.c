@@ -1,5 +1,4 @@
 #include"ring_buffer.h"
-#include<stdio.h>
 
 void ring_buffer_init(ring_buffer_t* rb){
     if(rb == NULL) return;

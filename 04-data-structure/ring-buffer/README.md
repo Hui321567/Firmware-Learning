@@ -34,7 +34,7 @@ It simulates hardware interrupt driven event handling (such as STM32 UART RX Int
 
 ## 6. Build & Run
 
-Bash
+```Bash
 # Compile the module
 make
 
@@ -43,7 +43,7 @@ make
 
 # Clean build artifacts
 make clean
-
+```
 ## 7. Verification
 
 The implementation was verified with functional and edge-case tests.

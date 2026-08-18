@@ -29,10 +29,11 @@ Demonstrated across dedicated test source files:
 ├── pointer_arithmetic.c
 ├── Makefile
 └── README.md
+```
 
-6. Build & Run
+## 6. Build & Run
 
-Bash
+```Bash
 # Compile all binaries
 make
 
@@ -47,14 +48,14 @@ make
 
 # Clean build artifacts
 make clean
-
-7. Verification / Debugging
+```
+## 7. Verification / Debugging
 Checked for zero memory leaks using Valgrind:
 
 Bash
 valgrind --leak-check=full ./dynamic_memory
 
-8. What I Learned
+## 8. What I Learned
 How CPU alignment requirements introduce compiler padding bytes inside structs.
 
 How pointer type casting affects byte offsets during memory traversal.
