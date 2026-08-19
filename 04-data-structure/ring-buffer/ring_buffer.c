@@ -7,11 +7,11 @@ void ring_buffer_init(ring_buffer_t* rb){
     rb->count = 0;
 }
 
-bool ring_buffer_isFull(ring_buffer_t* rb){
+bool ring_buffer_isFull(const ring_buffer_t* rb){
     return rb ? (rb->count == RING_BUFFER_SIZE):false;
 }
 
-bool ring_buffer_isEmpty(ring_buffer_t* rb){
+bool ring_buffer_isEmpty(const ring_buffer_t* rb){
     return rb ? (rb->count == 0):false;
 }
 
