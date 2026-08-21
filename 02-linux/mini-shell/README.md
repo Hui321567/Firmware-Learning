@@ -1,22 +1,22 @@
-# Linux Mini-Shell Implementation
+# Linux Mini-Shell & Pipeline Implementation
 
 ## 1. Overview
-This project implements a lightweight custom command-line interface (Shell) in C, demonstrating core Linux system programming concepts including process creation, program execution overriding, and process synchronization.
+This project implements a custom command-line interface (Shell) in C, demonstrating core Linux system programming concepts including process creation, program execution overriding, and inter-process communication (IPC) using anonymous pipes.
 
 ## 2. Learning Objectives
 - Master process lifecycle management using `fork()`, `execvp()`, and `waitpid()`.
 - Implement user input parsing and argument tokenization.
-- Understand how operating system shells interface between users and system APIs.
-- Prevent resource leaks and zombie processes during asynchronous execution.
+- Understand IPC using `pipe()` and file descriptor redirection via `dup2()`.
+- Prevent resource leaks, dangling file descriptors, and zombie processes.
 
 ## 3. Key Concepts
-- **Process Creation (`fork`)**: Clones the parent shell process to create a child execution context.
-- **Program Execution (`execvp`)**: Replaces the child process image with the target binary (e.g., `ls`, `pwd`).
-- **Process Harvesting (`waitpid`)**: Synchronizes the parent process, waiting for child termination to prevent zombie processes.
-- **String Tokenization (`strtok`)**: Breaks user command input into an array of argument pointers terminating with `NULL`.
+- **Process Creation (`fork`)**: Clones the shell process to create child execution contexts.
+- **Program Execution (`execvp`)**: Replaces child process images with target binaries (e.g., `ls`, `grep`).
+- **Process Synchronization (`waitpid`)**: Synchronizes the parent process, harvesting terminated child processes.
+- **Pipeline Communication (`pipe` & `dup2`)**: Redirects `STDOUT` of the left command to the writing end of a pipe and `STDIN` of the right command to the reading end.
 
 ## 4. Implementation
-- `main.c`: Implements the Read-Eval-Print Loop (REPL), command parser, built-in commands (`exit`), and process dispatch logic.
+- `main.c`: Contains the REPL loop, string tokenization, single-command execution, and two-stage pipeline process management (`execute_pipe`).
 
 ## 5. Project Structure
 ```text
@@ -26,35 +26,31 @@ This project implements a lightweight custom command-line interface (Shell) in C
 └── README.md
 ```
 ## 6. Build & Run
-
 ```Bash
-
 # Compile binary
 make
 
 # Execute mini-shell
 ./myshell
 
-# Test commands inside myshell
-myshell> ls -l
-myshell> pwd
-myshell> cat Makefile
+# Test pipeline commands inside myshell
+myshell> ls -l | grep main
+myshell> cat Makefile | grep CC
 myshell> exit
 
 # Clean build artifacts
 make clean
 ```
-
 ## 7. Verification / Debugging
-1. Command Execution: Verified standard Linux commands (ls, pwd, cat) execute and display output correctly.
+1. Pipeline Redirection: Verified ls | grep main and cat Makefile | grep CC process inputs/outputs via IPC pipes correctly.
 
-2. Process Lifecycle: Verified via ps that child processes terminate and are harvested cleanly by waitpid() without leaving zombie processes (Z state).
+2. Resource & Process Safety: Confirmed file descriptors are explicitly closed in parent/child processes to avoid pipeline hangs, and children are reaped via waitpid().
 
-3. Memory Safety: Built with -Wall -Wextra -std=c11 resulting in zero compiler warnings.
+3. Compiler Diagnostics: Compiled with -Wall -Wextra -std=c11 resulting in zero warnings.
 
 ## 8. What I Learned
-- Why execvp() requires a NULL-terminated pointer array as its second argument.
+- How dup2() replaces standard file descriptors (STDIN/STDOUT) with pipe descriptors.
 
-- The difference between string character assignment ('\0') and string literals ("\0").
+- Why both ends of the pipe must be closed in the parent process to allow child processes to receive EOF.
 
-- How shell interfaces bridge command strings to low-level kernel system calls.
+- How to structure robust error handling and process cleanup when fork() fails.
