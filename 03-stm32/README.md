@@ -1,50 +1,28 @@
 # STM32 Bare-Metal & Driver Development
 
-## 1. Overview
-This module focuses on low-level firmware development for STM32 microcontrollers (ARM Cortex-M4 Architecture, targeted at NUCLEO-F401RE), without relying on vendor-provided HAL abstractions. It emphasizes direct memory-mapped register manipulation, startup scripts, linker scripts, and hardware interrupt handling.
+## Overview
 
-## 2. Learning Objectives
-- Master ARM Cortex-M4 bare-metal programming using pure C structures and pointer dereferencing.
-- Understand the build toolchain flow: compilation with `arm-none-eabi-gcc`, linking with GNU Linker Scripts (`.ld`), and binary generation.
-- Implement register-level drivers for GPIO, Timers, UART, and Interrupt Controller (NVIC).
-- Integrate hardware UART RX interrupts with Ring Buffers for efficient asynchronous communication.
+Register-level firmware exercises for the NUCLEO-F401RE (STM32F401RE, Arm Cortex-M4). The GPIO milestones use direct memory-mapped registers rather than STM32 HAL or LL GPIO APIs.
 
-## 3. Key Concepts
-- **Cross-Compilation**: Compiling ARM machine code binaries on an x86_64 Linux host using `arm-none-eabi-gcc`.
-- **Memory-Mapped I/O**: Accessing peripheral hardware registers by dereferencing specific physical memory addresses.
-- **Linker Script (`.ld`)**: Defining Flash and SRAM memory boundaries, section placement (`.text`, `.data`, `.bss`), and entry point vectors.
-- **Interrupt Service Routine (ISR)**: Asynchronous event handlers triggered by hardware interrupts.
+## Projects
 
-## 4. Environment Setup
-- **Cross Compiler**: `arm-none-eabi-gcc`
-- **Flashing & Debugging**: OpenOCD / ST-Link V2
-- **Hardware Target**: NUCLEO-F401RE (STM32F401RE) / CP2102 USB-TTL UART Module
+| Project | Status | Focus |
+|---|---|---|
+| `01-uart-driver/` | Completed (host simulation) | Register-level UART driver design |
+| `02-gpio-baremetal/` | Completed on hardware | PA5 GPIO output and LED blink; standalone boot/link flow plus preserved CubeIDE project |
+| `03-gpio-button-polling/` | Completed on hardware | PC13 active-low polling, state-change detection, PA5 LED toggle, and software debounce |
 
-## 5. Project Structure
-```text
-03-stm32/
-├── 01-uart-driver/        # Simulated UART driver logic in C
-├── 01-gpio-baremetal/     # Bare-metal GPIO LED control (In progress)
-└── README.md
-```
-## 6. Build & Flash Workflows
-```Bash
-# Verify ARM Toolchain
-arm-none-eabi-gcc --version
+## Hardware and tools
 
-# Build Bare-metal binary
-make
+- Board: ST NUCLEO-F401RE
+- MCU: STM32F401RE
+- IDE: STM32CubeIDE
+- Standalone toolchain: `arm-none-eabi-gcc`, GNU Make, OpenOCD or ST-Link tools
 
-# Flash firmware via OpenOCD
-openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c "program build/firmware.elf verify reset exit"
-```
+Each project has its own README with implementation, build workflow, and verification notes.
 
-## 7. Verification / Debugging
-1. Toolchain Verification: Verified arm-none-eabi-gcc cross-compiler environment on Linux host.
+## Next steps
 
-2. GDB & OpenOCD Debugging: Connects to target MCU via GDB server for single-step register-level debugging.
-
-## 8. What I Learned
-- The fundamental difference between Native Compilation (Host) and Cross Compilation (Target).
-
-- Why register addresses require volatile type qualifiers to prevent compiler optimization on memory-mapped I/O.
+- Replace blocking debounce with timer-based, non-blocking input handling.
+- Implement EXTI button interrupts.
+- Port UART to hardware and combine interrupt-driven RX with the ring buffer module.

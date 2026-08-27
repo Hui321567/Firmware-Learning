@@ -1,0 +1,23 @@
+# Build output
+build/
+Debug/
+Release/
+*.elf
+*.bin
+*.hex
+*.map
+*.o
+*.d
+*.list
+*.su
+
+# STM32CubeIDE workspace and local debug state
+.metadata/
+*.launch
+.settings/com.st.stm32cube.ide.mcu.sfrview.prefs
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

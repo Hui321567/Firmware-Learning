@@ -25,11 +25,14 @@ This project implements a bare-metal LED blink firmware for the STMicroelectroni
 ## 5. Project Structure
 ```text
 02-gpio-baremetal/
-├── main.c          # Vector table, Reset_Handler (CRT setup), and GPIO register control logic
-├── stm32f401.ld    # GNU Linker Script specifying FLASH/SRAM boundaries and section placement
-├── Makefile        # Build rules for compilation, linking, size analysis, and binary generation
+├── main.c          # Standalone vector table, CRT setup, and GPIO output logic
+├── stm32f401.ld    # Standalone GNU linker script
+├── Makefile        # Standalone GNU Arm build
+├── cubeide/        # Original importable STM32CubeIDE LED blink project
 └── README.md       # Project documentation
 ```
+
+The standalone project demonstrates the boot and link process explicitly. The `cubeide/` subdirectory preserves the original CubeIDE milestone source and project metadata while generated build output is excluded.
 ## 6. Build & Flash Workflows
 Build Firmware
 Compile C source code, link with custom linker script, and output binary payload:
