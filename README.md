@@ -35,7 +35,8 @@ Firmware-Learning/
 |-- 03-stm32/
 |   |-- 01-uart-driver/          # Register-level UART driver simulation
 |   |-- 02-gpio-baremetal/      # PA5 LED blink / GPIO output milestone
-|   `-- 03-gpio-button-polling/ # PC13 polling, toggle and debounce milestone
+|   |-- 03-gpio-button-polling/ # PC13 polling, toggle and debounce milestone
+|   `-- 04-exti-interrupt/      # PC13 EXTI13 / IRQ40 interrupt milestone
 |-- 04-data-structure/
 |   `-- ring-buffer/
 |-- 05-leetcode/
@@ -56,11 +57,11 @@ Firmware-Learning/
 - [x] STM32 register-level UART driver simulation
 - [x] STM32F401RE bare-metal GPIO output / LED blink (hardware validated)
 - [x] STM32F401RE button polling / LED toggle / debounce (hardware validated)
+- [x] STM32F401RE EXTI button interrupt / LED state toggle (hardware validated)
 
 ### Planned
 
 - [ ] STM32 hardware UART porting
-- [ ] GPIO external interrupts (EXTI)
 - [ ] UART interrupt and ring buffer integration
 - [ ] SPI / I2C sensor interfacing
 - [ ] Basic RTOS integration
