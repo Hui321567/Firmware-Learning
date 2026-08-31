@@ -2,7 +2,7 @@
 
 ## Overview
 
-This milestone uses the NUCLEO-F401RE USER button to generate an external interrupt and toggle the onboard LD2 LED state. Peripheral setup and interrupt handling use direct memory-mapped register access without STM32 HAL or LL APIs.
+This milestone uses the NUCLEO-F401RE USER button to generate an external interrupt and toggle the onboard LD2 LED state. It extends the initial interrupt implementation into an event-driven design: the ISR publishes a button event, the main execution context consumes it and updates the LED, and the CPU waits for the next interrupt while idle. Peripheral setup and interrupt handling use direct memory-mapped register access without STM32 HAL or LL APIs.
 
 The firmware was built with STM32CubeIDE and validated on physical NUCLEO-F401RE hardware.
 
@@ -31,13 +31,16 @@ NVIC IRQ40 (ISER1 bit 8)
 Vector table: EXTI15_10_IRQHandler
         |
         v
-ISR clears EXTI_PR and toggles led_state
+ISR clears EXTI_PR and sets button_event
         |
         v
-Main loop updates PA5 through GPIOA_BSRR
+Main consumes event, toggles led_state, and updates PA5
+        |
+        v
+CPU executes WFI until the next interrupt
 ```
 
-The interrupt service routine only acknowledges the interrupt and changes the shared state. The main loop performs the LED output update.
+The interrupt service routine stays short: it only acknowledges EXTI13 and sets `button_event`. The main loop clears and consumes that event, toggles its non-volatile `led_state`, and updates the LED. Once no work remains, `cpu_wait_for_interrupt()` executes the `wfi` instruction instead of busy-polling.
 
 ## Register-level implementation
 
@@ -60,7 +63,22 @@ The interrupt service routine only acknowledges the interrupt and changes the sh
 EXTI_PR = (1U << BUTTON_PIN);
 ```
 
-The ISR-shared `led_state` variable is declared `volatile` so the compiler does not assume that it only changes in the main execution flow.
+`button_event` is declared `static volatile bool` because it is shared between the ISR and main execution contexts. `volatile` preserves the required accesses to an object that can change outside the current execution flow; it does **not** make a read-modify-write operation atomic and does not by itself prevent race conditions or provide synchronization.
+
+`led_state` is not volatile because it belongs exclusively to the main execution context. The ISR publishes an event rather than modifying LED application state directly.
+
+## Event-driven execution
+
+```text
+Idle in WFI
+    -> PC13 falling edge wakes the CPU
+    -> EXTI15_10_IRQHandler clears EXTI_PR and sets button_event
+    -> main clears button_event and toggles led_state
+    -> main updates LD2 through GPIOA_BSRR
+    -> return to WFI
+```
+
+This separation keeps interrupt latency predictable and leaves application behavior in `main()`. It also establishes a reusable pattern for later non-blocking timing and debounce work.
 
 ## Project structure
 
@@ -89,9 +107,10 @@ Generated `Debug/` and `Release/` directories, workspace `.metadata/`, machine-l
 3. Build the Debug configuration and confirm zero errors and zero warnings.
 4. Connect the NUCLEO-F401RE through ST-Link, then start a debug session or run the firmware.
 5. Press and release USER button B1 repeatedly.
-6. Confirm that LD2 toggles once for each tested press.
+6. In the debugger, confirm the CPU waits at `wfi`, a PC13 interrupt enters `EXTI15_10_IRQHandler`, `button_event` becomes true, and main consumes it.
+7. Confirm that LD2 toggles once for each tested press.
 
-The final firmware passed repeated physical button tests on the target board.
+The final firmware was verified on physical hardware through the complete path: WFI wait, PC13 interrupt wake-up, ISR event publication, main-context event consumption, and LED toggle.
 
 ## Debug notes
 
@@ -121,4 +140,6 @@ This diagnosis was confirmed by checking the EXTI pending register, calculating 
 - How IRQ numbers map to NVIC set-enable registers and bit positions.
 - How the vector table, linker symbols, and weak interrupt handlers work together.
 - Why an ISR name must exactly match the symbol referenced by the vector table.
-- How to keep ISR work small by sharing state with the main loop.
+- How an event flag keeps the ISR short and moves application work into the main context.
+- Why `volatile` does not imply atomicity, synchronization, or race-condition safety.
+- How `wfi` avoids busy-polling while the firmware is idle.

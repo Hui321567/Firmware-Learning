@@ -73,28 +73,43 @@ static inline void led_on(void){
 static inline void led_off(void){
 	GPIOA_BSRR = (1U << (LED_PIN + 16U));
 }
-static volatile bool led_state = false;
+
+static inline void cpu_wait_for_interrupt(void){
+	__asm volatile ("wfi");
+}
+
+static volatile bool button_event = false;
 
 void EXTI15_10_IRQHandler(void){
 	if(EXTI_PR & (1U << BUTTON_PIN)){
 		EXTI_PR = (1U << BUTTON_PIN);
-		led_state = !led_state;
+		button_event = true;
 	}
 }
 
 int main(void)
 {
+	bool led_state = false;
+
 	gpio_init();
 	exti_init();
 
+	led_off();
+
     /* Loop forever */
 	for(;;){
+		if(button_event){
+			button_event = false;
+			led_state = !led_state;
 
-		if(led_state){
-			led_on();
+			if(led_state){
+				led_on();
+			}
+			else{
+				led_off();
+			}
 		}
-		else{
-			led_off();
-		}
+
+		cpu_wait_for_interrupt();
 	}
 }
