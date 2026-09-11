@@ -38,7 +38,8 @@ Firmware-Learning/
 |   |-- 03-gpio-button-polling/ # PC13 polling, toggle and debounce milestone
 |   |-- 04-exti-interrupt/      # PC13 EXTI13 / IRQ40 interrupt milestone
 |   |-- 05-systick-nonblocking-debounce/ # EXTI + 1 ms SysTick debounce
-|   `-- 06-uart-interrupt-ring-buffer/   # USART2 RX interrupt + FIFO buffering
+|   |-- 06-uart-interrupt-ring-buffer/   # USART2 RX interrupt + FIFO buffering
+|   `-- 07-uart-command-parser/          # Line commands + overflow recovery
 |-- 04-data-structure/
 |   `-- ring-buffer/
 |-- 05-leetcode/
@@ -62,6 +63,7 @@ Firmware-Learning/
 - [x] STM32F401RE EXTI button interrupt / LED state toggle (hardware validated)
 - [x] STM32F401RE SysTick non-blocking button debounce (hardware validated)
 - [x] STM32F401RE USART2 RX interrupt / ring buffer / LED commands (hardware validated)
+- [x] STM32F401RE UART command parser / command overflow recovery (hardware validated)
 
 ### Planned
 
