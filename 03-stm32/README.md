@@ -15,6 +15,7 @@ Register-level firmware exercises for the NUCLEO-F401RE (STM32F401RE, Arm Cortex
 | `05-systick-nonblocking-debounce/` | Completed on hardware | EXTI event flag, 1 ms SysTick timebase, 50 ms non-blocking active-low confirmation, PA5 toggle, and WFI |
 | `06-uart-interrupt-ring-buffer/` | Completed on hardware | USART2 RXNE interrupt, single-producer/single-consumer ring buffer, overflow counter, and UART `1`/`0` LED control |
 | `07-uart-command-parser/` | Completed on hardware | CR-terminated LED/STATUS commands, bounded command buffer, overflow discard and recovery |
+| `08-tim2-hardware-timer/` | Completed on hardware | TIM2 1 s update interrupt, IRQ28, UIF acknowledgement, and PA5 LED toggle |
 
 ## Hardware and tools
 
