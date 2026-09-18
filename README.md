@@ -36,7 +36,10 @@ Firmware-Learning/
 |   |-- 01-uart-driver/          # Register-level UART driver simulation
 |   |-- 02-gpio-baremetal/      # PA5 LED blink / GPIO output milestone
 |   |-- 03-gpio-button-polling/ # PC13 polling, toggle and debounce milestone
-|   `-- 04-exti-interrupt/      # PC13 EXTI13 / IRQ40 interrupt milestone
+|   |-- 04-exti-interrupt/      # PC13 EXTI13 / IRQ40 interrupt milestone
+|   |-- 05-systick-nonblocking-debounce/ # SysTick debounce milestone
+|   |-- 08-tim2-hardware-timer/ # TIM2 update interrupt milestone
+|   `-- 09-tim2-pwm/           # TIM2_CH1 / PA5 AF1, 1 kHz, 50% duty
 |-- 04-data-structure/
 |   `-- ring-buffer/
 |-- 05-leetcode/
@@ -58,6 +61,10 @@ Firmware-Learning/
 - [x] STM32F401RE bare-metal GPIO output / LED blink (hardware validated)
 - [x] STM32F401RE button polling / LED toggle / debounce (hardware validated)
 - [x] STM32F401RE EXTI button interrupt / LED state toggle (hardware validated)
+
+- [x] STM32F401RE SysTick non-blocking debounce (hardware validated)
+- [x] STM32F401RE TIM2 hardware timer / update interrupt (hardware validated)
+- [x] STM32F401RE TIM2_CH1 hardware PWM / PA5 AF1, 1 kHz, 50% duty (hardware validated)
 
 ### Planned
 
