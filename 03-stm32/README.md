@@ -13,6 +13,8 @@ Register-level firmware exercises for the NUCLEO-F401RE (STM32F401RE, Arm Cortex
 | `03-gpio-button-polling/` | Completed on hardware | PC13 active-low polling, state-change detection, PA5 LED toggle, and software debounce |
 | `04-exti-interrupt/` | Completed on hardware | PC13-to-EXTI13 routing, falling-edge interrupt, IRQ40/NVIC configuration, and ISR-driven LED state toggle |
 | `05-systick-nonblocking-debounce/` | Completed on hardware | EXTI event flag, 1 ms SysTick timebase, 50 ms non-blocking active-low confirmation, PA5 toggle, and WFI |
+| `06-uart-interrupt-ring-buffer/` | Completed on hardware | USART2 RXNE interrupt, single-producer/single-consumer ring buffer, overflow counter, and UART `1`/`0` LED control |
+| `07-uart-command-parser/` | Completed on hardware | CR-terminated LED/STATUS commands, bounded command buffer, overflow discard and recovery |
 | `08-tim2-hardware-timer/` | Completed on hardware | TIM2 1 s update interrupt, IRQ28, UIF acknowledgement, and PA5 LED toggle |
 | `09-tim2-pwm/` | Completed on hardware | TIM2_CH1 on PA5 AF1; 1 kHz PWM, final 50% duty; 25%/50%/75% brightness checks; no ISR |
 
@@ -28,4 +30,4 @@ Each project has its own README with implementation, build workflow, and verific
 ## Next steps
 
 - Explore one-shot timer wakeups to reduce the 1 ms SysTick wake frequency during idle periods.
-- Port UART to hardware and combine interrupt-driven RX with the ring buffer module.
+- Add USART error handling and explore interrupt- or DMA-driven transmission.
