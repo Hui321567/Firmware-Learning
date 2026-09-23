@@ -17,6 +17,7 @@ Register-level firmware exercises for the NUCLEO-F401RE (STM32F401RE, Arm Cortex
 | `07-uart-command-parser/` | Completed on hardware | CR-terminated LED/STATUS commands, bounded command buffer, overflow discard and recovery |
 | `08-tim2-hardware-timer/` | Completed on hardware | TIM2 1 s update interrupt, IRQ28, UIF acknowledgement, and PA5 LED toggle |
 | `09-tim2-pwm/` | Completed on hardware | TIM2_CH1 on PA5 AF1; 1 kHz PWM, final 50% duty; 25%/50%/75% brightness checks; no ISR |
+| `10-spi-baremetal/` | Completed on hardware | SPI1 Master Mode 0, 8-bit, MSB first, BR=/8; TXE/RXNE/BSY polling; D11-D12 loopback verified with 0xA5 and 0x3C; no HAL |
 
 ## Hardware and tools
 
