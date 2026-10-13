@@ -19,6 +19,8 @@ Register-level firmware exercises for the NUCLEO-F401RE (STM32F401RE, Arm Cortex
 | `09-tim2-pwm/` | Completed on hardware | TIM2_CH1 on PA5 AF1; 1 kHz PWM, final 50% duty; 25%/50%/75% brightness checks; no ISR |
 | `10-spi-baremetal/` | Completed on hardware | SPI1 Master Mode 0, 8-bit, MSB first, BR=/8; TXE/RXNE/BSY polling; D11-D12 loopback verified with 0xA5 and 0x3C; no HAL |
 
+| `11-i2c-baremetal/` | Completed on hardware | AT24C256 EEPROM: page write, ACK polling, 4-byte sequential read and byte-wise verify; preserved CubeIDE project and Debug evidence |
+
 ## Hardware and tools
 
 - Board: ST NUCLEO-F401RE
