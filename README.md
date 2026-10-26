@@ -41,7 +41,10 @@ Firmware-Learning/
 |   |-- 06-uart-interrupt-ring-buffer/   # USART2 RX interrupt + FIFO buffering
 |   |-- 07-uart-command-parser/          # Line commands + overflow recovery
 |   |-- 08-tim2-hardware-timer/          # TIM2 update interrupt milestone
-|   `-- 09-tim2-pwm/                    # TIM2_CH1 / PA5 AF1, 1 kHz, 50% duty
+|   |-- 09-tim2-pwm/                    # TIM2_CH1 / PA5 AF1, 1 kHz, 50% duty
+|   |-- 10-spi-baremetal/               # SPI1 hardware loopback
+|   |-- 11-i2c-baremetal/               # AT24C256 EEPROM verification
+|   `-- 12-uart-rx-dma/                # USART2 circular RX DMA; core features completed
 |-- 04-data-structure/
 |   `-- ring-buffer/
 |-- 05-leetcode/
@@ -68,6 +71,10 @@ Firmware-Learning/
 - [x] STM32F401RE UART command parser / command overflow recovery (hardware validated)
 - [x] STM32F401RE TIM2 hardware timer / update interrupt (hardware validated)
 - [x] STM32F401RE TIM2_CH1 hardware PWM / PA5 AF1, 1 kHz, 50% duty (hardware validated)
+
+### Core Features Completed
+
+- [STM32F401RE USART2 RX DMA](03-stm32/12-uart-rx-dma/): 128-byte circular buffer, NDTR consumer, HT/TC and error diagnostics. DMA buffer-overrun detection is not guaranteed; error recovery is not implemented.
 
 ### Planned
 

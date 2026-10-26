@@ -10,6 +10,7 @@ Release/
 *.d
 *.list
 *.su
+*.cyclo
 
 # STM32CubeIDE workspace and local debug state
 .metadata/
