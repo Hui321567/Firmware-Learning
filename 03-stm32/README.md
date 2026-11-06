@@ -20,6 +20,7 @@ Register-level firmware exercises for the NUCLEO-F401RE (STM32F401RE, Arm Cortex
 | `10-spi-baremetal/` | Completed on hardware | SPI1 Master Mode 0, 8-bit, MSB first, BR=/8; TXE/RXNE/BSY polling; D11-D12 loopback verified with 0xA5 and 0x3C; no HAL |
 | `11-i2c-baremetal/` | Completed on hardware | AT24C256 EEPROM: page write, ACK polling, 4-byte sequential read and byte-wise verify; preserved CubeIDE project and Debug evidence |
 | [12-uart-rx-dma/](12-uart-rx-dma/) | Core Features Completed | USART2 circular RX DMA, 128-byte buffer, NDTR consumer, HT/TC and error diagnostics; no guaranteed buffer-overrun detection or automatic error recovery |
+| [13-uart-dma-idle-packet/](13-uart-dma-idle-packet/) | Hardware-tested (software Fault recovery) | USART2 circular RX DMA + IDLE, CR/LF parser, and software recovery; real hardware faults not exhaustively tested |
 
 ## Hardware and tools
 
