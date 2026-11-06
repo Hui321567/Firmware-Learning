@@ -19,7 +19,7 @@
 #include <stdint.h>
 
 /* ==========================================
- * 1. Register Definitions
+ * Register Definitions
  * ========================================== */
 
 /* RCC */
@@ -84,7 +84,7 @@ static uint8_t packet_discard = 0U;
 #define USART2_DR_ADDRESS 0x40004404U
 
 /* ==========================================
- * 2. Debug Variables
+ * Debug Variables
  * ========================================== */
 
 volatile uint8_t rx_buffer[RX_SIZE];
@@ -117,7 +117,7 @@ volatile uint32_t packet_too_long_count = 0U;
 volatile uint32_t dma_recovery_count = 0U;
 
 /* ==========================================
- * 3. USART2 Configuration
+ * USART2 Configuration
  * ========================================== */
 
 static void uart2_init(void)
@@ -159,7 +159,7 @@ static void uart2_init(void)
 }
 
 /* ==========================================
- * 4. DMA1 Stream5 Configuration
+ * DMA1 Stream5 Configuration
  * ========================================== */
 
 static void uart_dma_rx_init(void)
@@ -211,32 +211,32 @@ static void uart_dma_rx_init(void)
 }
 
 /* ==========================================
- * 5. UART DMA Reception Start
+ * UART DMA Reception Start
  * ========================================== */
 
 static void uart_dma_rx_start(void)
 {
-    /* Enable DMA1 Stream5 IRQ16 */
+    /* 1. Enable DMA1 Stream5 IRQ16 */
     NVIC_ISER0 = (1U << 16U);
 
-    /* Enable USART2 IRQ38 */
+    /* 2. Enable USART2 IRQ38 */
     NVIC_ISER1 = (1U << 6U);
 
-    /* Enable DMA1 Stream5 */
+    /* 3. Enable DMA1 Stream5 */
     DMA1_S5CR |= (1U << 0U);
 
-    /* Enable USART DMA RX Request and Error IRQ */
+    /* 4. Enable USART DMA RX Request and Error IRQ */
     USART2_CR3 |= (1U << 6U)  // DMAR
                 | (1U << 0U); // EIE
 
-    /* Enable USART2 Receiver and IDLE IRQ */
+    /* 5. Enable USART2 Receiver and IDLE IRQ */
     USART2_CR1 |= (1U << 13U) // UE
                 | (1U << 2U)  // RE
                 | (1U << 4U); // IDLEIE
 }
 
 /* ==========================================
- * 6. DMA Interrupt Handler
+ * DMA Interrupt Handler
  * ========================================== */
 
 void DMA1_Stream5_IRQHandler(void)
@@ -434,7 +434,7 @@ static void uart_dma_rx_recover(void)
 }
 
 /* ==========================================
- * 7. Main
+ *  Main
  * ========================================== */
 
 int main(void)
