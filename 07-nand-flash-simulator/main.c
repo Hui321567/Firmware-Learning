@@ -78,17 +78,32 @@ static int nand_program(uint32_t ppn, const uint8_t* buffer){
     return 0;
 }
 
+static int nand_erase(uint32_t block){
+    if(block >= BLOCK_COUNT)return -1;
+
+    for(uint32_t page = 0U ; page < PAGES_PER_BLOCK ; page++){
+        for(uint32_t data = 0U ; data < PAGE_SIZE ; data++){
+            nand_flash.blocks[block].pages[page].data[data] = 0xFFU;
+        }
+    }
+    return 0;
+}
+
 int main(void){
 
-    printf("NandPage : %zu Bytes\n",sizeof(NandPage));
-    printf("NandBlock : %zu Bytes\n",sizeof(NandBlock));
-    printf("NandFlash : %zu Bytes\n",sizeof(NandFlash));
+    uint32_t failed_count = 0U;
+
+    printf("=== NAND Flash Simulator Tests ===\n");
 
     nand_init();
 
-    printf("Non-Erased Byte = %u\n",(unsigned int)nand_count_non_erased());
-
-    printf("Erased Byte = 0x%02X\n",(unsigned int)nand_flash.blocks[1].pages[3].data[255]);
+    if(nand_count_non_erased() == 0U){
+        printf("[PASS] NAND Initialization\n");
+    }
+    else{
+        printf("[FAIL] NAND Initialization\n");
+        failed_count++;
+    }
 
     uint8_t write_buffer[PAGE_SIZE];
 
@@ -100,25 +115,30 @@ int main(void){
 
     int program_result = nand_program(0U, write_buffer);
 
-    printf("Program result = %d\n",program_result);
-
-    printf("Read Byte = 0x%02X\n",(unsigned int)nand_flash.blocks[0].pages[0].data[0]);
-    printf("Non-Erased Byte After Write = %u\n",(unsigned int)nand_count_non_erased());
+    if((program_result == 0) && (nand_count_non_erased() == 1U)){
+        printf("[PASS] Page Program\n");
+    }
+    else{
+        printf("[FAIL] Page Program\n");
+        failed_count++;
+    }
 
     uint8_t read_buffer[PAGE_SIZE];
 
     int invalid_result = nand_read(8U, read_buffer);
-    printf("Invalid PPN Result = %d\n", invalid_result);
-
     int null_result = nand_read(0U, NULL);
-    printf("NULL Buffer Result = %d\n", null_result);
+
+    if((invalid_result == -1)&&(null_result == -2)){
+        printf("[PASS] Invalid Read Parameters\n");
+    }
+    else{
+        printf("[FAIL] Invalid Read Parameters\n");
+        failed_count++;
+    }
 
     int result = nand_read(0U, read_buffer);
 
-    printf("nand_read result = %d\n",result);
-
     if(result == 0){
-        printf("Read Buffer Byte = 0x%02X\n",(unsigned int)read_buffer[0]);
 
         uint32_t read_mismatch_count = 0U;
 
@@ -132,19 +152,27 @@ int main(void){
                 read_mismatch_count ++;
         }
 
-        printf("read mismatch count = %u\n",(unsigned int)read_mismatch_count);
+        if(read_mismatch_count == 0U){
+            printf("[PASS] Page Read (256 Bytes)\n");
+        }
+        else{
+            printf("[FAIL] Page Read (256 Bytes)\n");
+            failed_count++;
+        }
 
+    }
+    else{
+        printf("[FAIL] Page Read (256 Bytes)\n");
+        failed_count++;
     }
 
     write_buffer[0] = 0xF0U;
 
     int invalid_program_result = nand_program(0U, write_buffer);
-    printf("invalid program result = %d\n",invalid_program_result);
 
     int verify_result = nand_read(0U, read_buffer);
 
     if(verify_result == 0){
-        printf("after failed program data = 0x%02X\n",(unsigned int)read_buffer[0]);
 
         uint32_t mismatch_count = 0U;
 
@@ -157,8 +185,46 @@ int main(void){
                 mismatch_count ++;
         }
 
-        printf("after failed program mismatch = %u\n",(unsigned int)mismatch_count);
+        if(invalid_program_result == -3 && mismatch_count == 0U){
+            printf("[PASS] Invalid Program & Data Preservation\n");
+        }
+        else{
+            printf("[FAIL] Invalid Program & Data Preservation\n");
+            failed_count++;
+        }
+    }
+    else{
+        printf("[FAIL] Invalid Program & Data Preservation\n");
+        failed_count++;
+    }
+
+    int block1_program_result = nand_program(4U, write_buffer);
+
+
+    int erase_result = nand_erase(0U);
+
+    if(erase_result == 0 && nand_count_non_erased() == 1U){
+        printf("[PASS] Block Erase\n");
+    }
+    else{
+        printf("[FAIL] Block Erase\n");
+        failed_count++;
     }
     
-    return 0;
+    int block1_read_result = nand_read(4U, read_buffer);
+
+    if((block1_program_result == 0) && (block1_read_result == 0) && (read_buffer[0] == 0xF0U)){
+
+        printf("[PASS] Other Block Data Preservation\n");
+    }
+    else{
+        printf("[FAIL] Other Block Data Preservation\n");
+        failed_count++;
+    }
+
+    printf("\nTests: %u passed, %u failed\n",
+       (unsigned int)(7U - failed_count),
+       (unsigned int)failed_count);
+
+    return (failed_count == 0U) ? 0 : 1;
 }

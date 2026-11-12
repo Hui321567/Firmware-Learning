@@ -28,6 +28,11 @@ This project simulates NAND Flash using memory arrays. No physical NAND hardware
 - 1-to-0 bit transition validation
 - Invalid Program rejection (return -3)
 - Failed Program preserves existing page data
+- Block Erase API (`nand_erase`)
+- Block index boundary validation
+- Block-level erase and data isolation
+- Seven basic PASS/FAIL tests
+- Test summary and process exit status
 
 ## Build and Run
 
@@ -42,27 +47,21 @@ Clean build output:
 make clean
 ```
 
-## Current Status
+### Current Status
 
-**Milestone 2: NAND Page Program**
+**Milestone 3: NAND Block Erase**
 
 Implemented and tested:
 - NAND Initialization
 - NAND Page Read
 - NAND Page Program
-- Invalid PPN and NULL buffer handling
-- Invalid bit transition detection
+- NAND Block Erase
+- Bit transition validation
 - Failed Program data preservation
+- Basic block isolation
+- Seven automated checks with PASS/FAIL reporting
 
 Planned:
-- NAND Block Erase
-- Page Program restrictions
-- Additional unit tests
+- Additional NAND operation restrictions
+- Expanded unit tests
 - Mini-FTL (Flash Translation Layer)
-
-## Development Environment
-
-- Language: C11
-- OS: Ubuntu Linux
-- Compiler: GCC
-- Build Tool: GNU Make
