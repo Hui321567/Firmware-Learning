@@ -24,6 +24,10 @@ This project simulates NAND Flash using memory arrays. No physical NAND hardware
 - Invalid PPN detection
 - NULL buffer detection
 - Full-page (256-byte) read verification
+- Page Program API (`nand_program`)
+- 1-to-0 bit transition validation
+- Invalid Program rejection (return -3)
+- Failed Program preserves existing page data
 
 ## Build and Run
 
@@ -40,17 +44,20 @@ make clean
 
 ## Current Status
 
-**Milestone 1: Initialization and Page Read**
+**Milestone 2: NAND Page Program**
 
 Implemented and tested:
-- NAND initialization
-- Page Read
-- Basic error handling
+- NAND Initialization
+- NAND Page Read
+- NAND Page Program
+- Invalid PPN and NULL buffer handling
+- Invalid bit transition detection
+- Failed Program data preservation
 
 Planned:
-- NAND Program
-- Block Erase
-- NAND operation constraints
+- NAND Block Erase
+- Page Program restrictions
+- Additional unit tests
 - Mini-FTL (Flash Translation Layer)
 
 ## Development Environment
